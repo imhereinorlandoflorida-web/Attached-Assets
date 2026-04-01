@@ -17,6 +17,10 @@ tags:
     description: Adaptive decision paths
   - name: dashboard
     description: Dashboard and analytics
+  - name: ai
+    description: AI inference engine with scoring and memory
+  - name: openai
+    description: OpenAI AI chat, image, and audio operations
 paths:
   /healthz:
     get:
@@ -232,6 +236,69 @@ paths:
               schema:
                 $ref: "#/components/schemas/AdaptivePath"
 
+  /sessions/{id}/memory:
+    get:
+      operationId: getSessionMemory
+      tags: [ai]
+      summary: Get AI memory snapshot for a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Memory snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemorySnapshot"
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: resetSessionMemory
+      tags: [ai]
+      summary: Reset AI memory for a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Memory reset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemorySnapshot"
+
+  /infer:
+    post:
+      operationId: runInference
+      tags: [ai]
+      summary: Submit input to AI engine for real-time scoring (SSE stream)
+      description: |
+        Accepts a text input and optional sessionId. The AI engine scores the input
+        semantically, assigns weight/category/confidence from memory context, and
+        streams the scored result back in real time. Consume with fetch + ReadableStream.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InferBody"
+      responses:
+        "200":
+          description: SSE stream of inference events
+          content:
+            text/event-stream: {}
+
   /dashboard/summary:
     get:
       operationId: getDashboardSummary
@@ -274,6 +341,122 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/SignalWeightStat"
+
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List all conversations
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Create a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOpenaiConversationBody"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a text message and receive a streaming text response
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendOpenaiMessageBody"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
 
 components:
   schemas:
@@ -509,3 +692,128 @@ components:
         - avgWeight
         - count
         - percentage
+
+    InferBody:
+      type: object
+      properties:
+        input:
+          type: string
+          description: Raw text input to score through the AI engine
+        sessionId:
+          type: ["integer", "null"]
+          description: Optional session ID to use for memory context
+      required:
+        - input
+
+    MemorySnapshot:
+      type: object
+      properties:
+        sessionId:
+          type: integer
+        signalCount:
+          type: integer
+        dominantCategory:
+          type: string
+        avgWeight:
+          type: number
+        avgConfidence:
+          type: number
+        patterns:
+          type: array
+          items:
+            type: string
+        learnedTags:
+          type: array
+          items:
+            type: string
+        adaptationScore:
+          type: number
+      required:
+        - sessionId
+        - signalCount
+        - dominantCategory
+        - avgWeight
+        - avgConfidence
+        - patterns
+        - learnedTags
+        - adaptationScore
+
+    OpenaiConversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - createdAt
+
+    OpenaiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - conversationId
+        - role
+        - content
+        - createdAt
+
+    CreateOpenaiConversationBody:
+      type: object
+      properties:
+        title:
+          type: string
+      required:
+        - title
+
+    SendOpenaiMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    OpenaiConversationWithMessages:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+      required:
+        - id
+        - title
+        - createdAt
+        - messages
+
+    OpenaiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
