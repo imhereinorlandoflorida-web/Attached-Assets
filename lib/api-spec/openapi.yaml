@@ -1,15 +1,22 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Sentinel API - adaptive path intelligence system
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: sessions
+    description: User input sessions
+  - name: signals
+    description: Input signals within sessions
+  - name: paths
+    description: Adaptive decision paths
+  - name: dashboard
+    description: Dashboard and analytics
 paths:
   /healthz:
     get:
@@ -24,6 +31,250 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /sessions:
+    get:
+      operationId: listSessions
+      tags: [sessions]
+      summary: List all sessions
+      responses:
+        "200":
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+    post:
+      operationId: createSession
+      tags: [sessions]
+      summary: Create a new session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSessionBody"
+      responses:
+        "201":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+
+  /sessions/{id}:
+    get:
+      operationId: getSession
+      tags: [sessions]
+      summary: Get a session by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Session found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateSession
+      tags: [sessions]
+      summary: Update a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSessionBody"
+      responses:
+        "200":
+          description: Session updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteSession
+      tags: [sessions]
+      summary: Delete a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Session deleted
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /sessions/{id}/signals:
+    get:
+      operationId: listSignals
+      tags: [signals]
+      summary: List signals for a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of signals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Signal"
+    post:
+      operationId: createSignal
+      tags: [signals]
+      summary: Submit a new signal to a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSignalBody"
+      responses:
+        "201":
+          description: Signal created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Signal"
+
+  /sessions/{id}/paths:
+    get:
+      operationId: listPaths
+      tags: [paths]
+      summary: List adaptive paths for a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of paths
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdaptivePath"
+
+  /sessions/{id}/paths/{pathId}/feedback:
+    post:
+      operationId: submitPathFeedback
+      tags: [paths]
+      summary: Submit feedback for a path
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: pathId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PathFeedbackBody"
+      responses:
+        "200":
+          description: Feedback recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdaptivePath"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get overall system summary and stats
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Get recent signal activity across all sessions
+      responses:
+        "200":
+          description: Recent activity feed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  /dashboard/signal-weights:
+    get:
+      operationId: getSignalWeights
+      tags: [dashboard]
+      summary: Get aggregate semantic weight distribution across all signals
+      responses:
+        "200":
+          description: Signal weight distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SignalWeightStat"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +285,227 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [active, paused, completed]
+        signalCount:
+          type: integer
+        pathCount:
+          type: integer
+        adaptationScore:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - status
+        - signalCount
+        - pathCount
+        - adaptationScore
+        - createdAt
+        - updatedAt
+
+    CreateSessionBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+      required:
+        - name
+
+    UpdateSessionBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [active, paused, completed]
+
+    Signal:
+      type: object
+      properties:
+        id:
+          type: integer
+        sessionId:
+          type: integer
+        input:
+          type: string
+        category:
+          type: string
+          enum: [behavioral, semantic, temporal, contextual]
+        weight:
+          type: number
+        confidence:
+          type: number
+        tags:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - sessionId
+        - input
+        - category
+        - weight
+        - confidence
+        - tags
+        - createdAt
+
+    CreateSignalBody:
+      type: object
+      properties:
+        input:
+          type: string
+        category:
+          type: string
+          enum: [behavioral, semantic, temporal, contextual]
+        weight:
+          type: number
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - input
+        - category
+
+    AdaptivePath:
+      type: object
+      properties:
+        id:
+          type: integer
+        sessionId:
+          type: integer
+        label:
+          type: string
+        description:
+          type: string
+        confidence:
+          type: number
+        feedbackScore:
+          type: number
+        nodes:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [active, reinforced, deprecated]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - sessionId
+        - label
+        - description
+        - confidence
+        - feedbackScore
+        - nodes
+        - status
+        - createdAt
+
+    PathFeedbackBody:
+      type: object
+      properties:
+        score:
+          type: number
+        note:
+          type: ["string", "null"]
+      required:
+        - score
+
+    DashboardSummary:
+      type: object
+      properties:
+        totalSessions:
+          type: integer
+        activeSessions:
+          type: integer
+        totalSignals:
+          type: integer
+        totalPaths:
+          type: integer
+        avgAdaptationScore:
+          type: number
+        topCategory:
+          type: string
+      required:
+        - totalSessions
+        - activeSessions
+        - totalSignals
+        - totalPaths
+        - avgAdaptationScore
+        - topCategory
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [signal, path, feedback, session]
+        sessionId:
+          type: integer
+        sessionName:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - type
+        - sessionId
+        - sessionName
+        - description
+        - createdAt
+
+    SignalWeightStat:
+      type: object
+      properties:
+        category:
+          type: string
+        avgWeight:
+          type: number
+        count:
+          type: integer
+        percentage:
+          type: number
+      required:
+        - category
+        - avgWeight
+        - count
+        - percentage
