@@ -169,6 +169,57 @@ export const SubmitPathFeedbackResponse = zod.object({
 });
 
 /**
+ * @summary Get AI memory snapshot for a session
+ */
+export const GetSessionMemoryParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetSessionMemoryResponse = zod.object({
+  sessionId: zod.number(),
+  signalCount: zod.number(),
+  dominantCategory: zod.string(),
+  avgWeight: zod.number(),
+  avgConfidence: zod.number(),
+  patterns: zod.array(zod.string()),
+  learnedTags: zod.array(zod.string()),
+  adaptationScore: zod.number(),
+});
+
+/**
+ * @summary Reset AI memory for a session
+ */
+export const ResetSessionMemoryParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const ResetSessionMemoryResponse = zod.object({
+  sessionId: zod.number(),
+  signalCount: zod.number(),
+  dominantCategory: zod.string(),
+  avgWeight: zod.number(),
+  avgConfidence: zod.number(),
+  patterns: zod.array(zod.string()),
+  learnedTags: zod.array(zod.string()),
+  adaptationScore: zod.number(),
+});
+
+/**
+ * Accepts a text input and optional sessionId. The AI engine scores the input
+semantically, assigns weight/category/confidence from memory context, and
+streams the scored result back in real time. Consume with fetch + ReadableStream.
+
+ * @summary Submit input to AI engine for real-time scoring (SSE stream)
+ */
+export const RunInferenceBody = zod.object({
+  input: zod.string().describe("Raw text input to score through the AI engine"),
+  sessionId: zod
+    .number()
+    .nullish()
+    .describe("Optional session ID to use for memory context"),
+});
+
+/**
  * @summary Get overall system summary and stats
  */
 export const GetDashboardSummaryResponse = zod.object({
@@ -205,3 +256,80 @@ export const GetSignalWeightsResponseItem = zod.object({
   percentage: zod.number(),
 });
 export const GetSignalWeightsResponse = zod.array(GetSignalWeightsResponseItem);
+
+/**
+ * @summary List all conversations
+ */
+export const ListOpenaiConversationsResponseItem = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListOpenaiConversationsResponse = zod.array(
+  ListOpenaiConversationsResponseItem,
+);
+
+/**
+ * @summary Create a new conversation
+ */
+export const CreateOpenaiConversationBody = zod.object({
+  title: zod.string(),
+});
+
+/**
+ * @summary Get conversation with messages
+ */
+export const GetOpenaiConversationParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetOpenaiConversationResponse = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  createdAt: zod.coerce.date(),
+  messages: zod.array(
+    zod.object({
+      id: zod.number(),
+      conversationId: zod.number(),
+      role: zod.string(),
+      content: zod.string(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+});
+
+/**
+ * @summary Delete a conversation
+ */
+export const DeleteOpenaiConversationParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List messages in a conversation
+ */
+export const ListOpenaiMessagesParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const ListOpenaiMessagesResponseItem = zod.object({
+  id: zod.number(),
+  conversationId: zod.number(),
+  role: zod.string(),
+  content: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListOpenaiMessagesResponse = zod.array(
+  ListOpenaiMessagesResponseItem,
+);
+
+/**
+ * @summary Send a text message and receive a streaming text response
+ */
+export const SendOpenaiMessageParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const SendOpenaiMessageBody = zod.object({
+  content: zod.string(),
+});

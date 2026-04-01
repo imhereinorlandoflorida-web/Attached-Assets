@@ -155,3 +155,57 @@ export interface SignalWeightStat {
   count: number;
   percentage: number;
 }
+
+export interface InferBody {
+  /** Raw text input to score through the AI engine */
+  input: string;
+  /**
+   * Optional session ID to use for memory context
+   * @nullable
+   */
+  sessionId?: number | null;
+}
+
+export interface MemorySnapshot {
+  sessionId: number;
+  signalCount: number;
+  dominantCategory: string;
+  avgWeight: number;
+  avgConfidence: number;
+  patterns: string[];
+  learnedTags: string[];
+  adaptationScore: number;
+}
+
+export interface OpenaiConversation {
+  id: number;
+  title: string;
+  createdAt: string;
+}
+
+export interface OpenaiMessage {
+  id: number;
+  conversationId: number;
+  role: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface CreateOpenaiConversationBody {
+  title: string;
+}
+
+export interface SendOpenaiMessageBody {
+  content: string;
+}
+
+export interface OpenaiConversationWithMessages {
+  id: number;
+  title: string;
+  createdAt: string;
+  messages: OpenaiMessage[];
+}
+
+export interface OpenaiError {
+  error: string;
+}
