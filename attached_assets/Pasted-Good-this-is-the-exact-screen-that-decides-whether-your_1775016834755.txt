@@ -1,0 +1,169 @@
+Good—this is the exact screen that decides whether your app ships or dies.
+
+Let’s walk through what you’re seeing and exactly what to do next so SENTINEL actually gets into TestFlight.
+
+⸻
+
+🧿 WHAT YOU’RE LOOKING AT
+
+This is App Store Connect → your control center.
+
+Those tabs = your launch pipeline:
+	•	TestFlight → beta (what you want right now)
+	•	App Store → public release (later)
+	•	Analytics / Monetization → after users exist
+
+⸻
+
+🚀 YOUR NEXT MOVE (RIGHT NOW)
+
+🔴 Step 1 — Get a Build Uploaded
+
+If you don’t see a build under TestFlight:
+
+In Xcode
+	1.	Plug in iPhone or select “Any iOS Device”
+	2.	Top menu:
+
+Product → Archive
+
+
+	3.	When it finishes:
+
+Distribute App → App Store Connect → Upload
+
+
+
+👉 This is the most common blocker
+No build = nothing appears here
+
+⸻
+
+🧪 Step 2 — Go to “TestFlight” Tab
+
+Once upload finishes (takes ~2–10 min):
+	•	Click TestFlight
+	•	You’ll see your build appear under iOS Builds
+
+⸻
+
+⚠️ Step 3 — Internal Testing (FAST PATH)
+
+Do this first:
+	1.	Click your build
+	2.	Add yourself as Internal Tester
+	3.	Hit Start Testing
+
+👉 No review needed
+👉 Works in minutes
+
+⸻
+
+🌍 Step 4 — External Testing (OPTIONAL)
+
+If you want others:
+	•	Add testers (email or link)
+	•	Apple does a light review (~24 hrs)
+
+⸻
+
+🧱 REQUIRED BEFORE TESTFLIGHT WORKS
+
+If buttons are disabled, you’re missing metadata.
+
+Go to App Store tab → App Information
+
+Fill:
+
+✔️ Required Fields
+	•	App Name: Sentinel
+	•	Subtitle: (keep it simple)
+Adaptive Path Intelligence
+	•	Category: Utilities / Productivity
+
+⸻
+
+✔️ Privacy Section (IMPORTANT)
+
+If your app:
+	•	Stores data locally → select “Data Not Collected”
+
+👉 This avoids rejection
+
+⸻
+
+✔️ Version Info
+
+Under “App Store” → Version:
+	•	Description:
+
+Sentinel is an adaptive path intelligence system that learns user input through semantic weighting and real-time feedback.
+
+
+	•	Keywords:
+
+AI, path, learning, adaptive, signal
+
+
+
+⸻
+
+⚠️ COMMON REJECTION TRAPS (AVOID THESE)
+
+Apple will reject if:
+
+❌ App crashes
+❌ Empty UI / placeholder app
+❌ No clear purpose
+❌ “Experimental AI” with no user value
+
+⸻
+
+🧿 HOW TO POSITION SENTINEL (PASS REVIEW)
+
+Do NOT describe it like this:
+
+“Neural unbound mirror consciousness system”
+
+Say this instead:
+
+“An interactive system that learns user input patterns and visualizes adaptive decision paths in real time.”
+
+👉 Same idea
+👉 Passes review
+
+⸻
+
+🎯 WHAT SUCCESS LOOKS LIKE
+
+You’ll know it worked when:
+	•	Build shows in TestFlight
+	•	“Install” appears on your iPhone
+	•	App runs outside Xcode
+
+⸻
+
+⚡ AFTER THIS (REAL MOMENT)
+
+Once it installs from TestFlight:
+
+You’ve officially crossed into:
+
+builder → shipped product
+
+⸻
+
+🧿 If You Get Stuck
+
+Tell me exactly what you see:
+	•	“No builds showing”
+	•	“Upload failed”
+	•	“TestFlight not clickable”
+
+I’ll debug it with you step-by-step.
+
+⸻
+
+You’re very close now—this part is mechanical, not conceptual.
+
+Get the build in, and everything changes.
