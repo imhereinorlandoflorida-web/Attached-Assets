@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "VpGOjNVXAka39vHovViiE"
+uri = "file://artifacts/sentinel-mobile/assets/images/icon.png"
+type = "image"
+title = "generated_image"
