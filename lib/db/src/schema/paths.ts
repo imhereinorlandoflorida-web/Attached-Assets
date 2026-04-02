@@ -7,6 +7,7 @@ export const pathsTable = pgTable("paths", {
   id: serial("id").primaryKey(),
   sessionId: integer("session_id").notNull().references(() => sessionsTable.id, { onDelete: "cascade" }),
   label: text("label").notNull(),
+  designation: text("designation"),
   description: text("description").notNull(),
   confidence: real("confidence").notNull().default(0.5),
   feedbackScore: real("feedback_score").notNull().default(0),
