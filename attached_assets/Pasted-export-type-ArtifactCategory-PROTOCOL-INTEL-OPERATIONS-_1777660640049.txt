@@ -1,0 +1,179 @@
+export type ArtifactCategory = "PROTOCOL" | "INTEL" | "OPERATIONS";
+export type ArtifactStatus = "STABLE" | "ACTIVE" | "PARTIAL" | "AT_RISK";
+
+export interface ArtifactMetric {
+  label: string;
+  value: string;
+}
+
+export interface ArtifactDomain {
+  id: string;
+  title: string;
+  category: ArtifactCategory;
+  status: ArtifactStatus;
+  summary: string;
+  rationale: string;
+  metrics: ArtifactMetric[];
+  nextActions: string[];
+  relatedFiles: string[];
+  tags: string[];
+}
+
+export interface SystemArtifact {
+  id: string;
+  title: string;
+  generatedOn: string;
+  thesis: string;
+  domains: ArtifactDomain[];
+}
+
+export const systemArtifact: SystemArtifact = {
+  id: "sovereign-lattice-oracle",
+  title: "Sovereign Lattice Oracle",
+  generatedOn: "2026-05-01",
+  thesis:
+    "A law-aware operator system that blends MFCS decision logic, lattice visualization, deterministic simulation, and mathematical reference tooling into one inspectable surface.",
+  domains: [
+    {
+      id: "protocol-001",
+      title: "Deterministic Simulation Harness",
+      category: "PROTOCOL",
+      status: "PARTIAL",
+      summary:
+        "The repo contains a seeded simulation harness for Gamma-state evolution, but the implementation currently exists in duplicate filename styles and needs consolidation before it can serve as the single truth generator.",
+      rationale:
+        "This layer is the foundation for reproducible tuning, CI comparisons, and measurable attractor behavior across the 96-path system.",
+      metrics: [
+        { label: "Seeded PRNG", value: "Present" },
+        { label: "Timeline Capture", value: "Present" },
+        { label: "Hashing", value: "Present" },
+        { label: "File Integrity", value: "Duplicate variants" }
+      ],
+      nextActions: [
+        "Consolidate dotted and dashed sim module variants into one authoritative layout.",
+        "Run `npm run lint` and verify the chosen harness path compiles cleanly.",
+        "Connect harness metrics into kernel-side validation hooks."
+      ],
+      relatedFiles: [
+        "src/lib/sim.harness.ts",
+        "src/lib/sim.metrics.ts",
+        "src/lib/sim.profiles.ts",
+        "src/lib/sim.types.ts",
+        "src/lib/sim.utils.ts"
+      ],
+      tags: ["determinism", "simulation", "gamma", "observability", "hashes"]
+    },
+    {
+      id: "protocol-002",
+      title: "MFCS Kernel and Law Compliance",
+      category: "PROTOCOL",
+      status: "STABLE",
+      summary:
+        "The MFCS kernel is the most structurally grounded part of the repo: it takes evaluated options, applies invariants, and produces vessel decisions with traceable state transitions.",
+      rationale:
+        "This is the law-bearing core of the system, and it is already wired into the engine's signal-processing path.",
+      metrics: [
+        { label: "Kernel Tests", value: "Present" },
+        { label: "Invariant Status", value: "Tracked" },
+        { label: "Decision Trace", value: "Tracked" },
+        { label: "Operator Exposure", value: "Partial" }
+      ],
+      nextActions: [
+        "Expose invariant violations more directly in the codex and console surfaces.",
+        "Feed deterministic harness outputs into validation scenarios.",
+        "Add a summary artifact for kernel law passes and failures."
+      ],
+      relatedFiles: [
+        "src/lib/mfcs/kernel.ts",
+        "src/lib/mfcs/kernel.test.ts",
+        "src/lib/mfcs/monitor.ts",
+        "src/lib/engine.ts"
+      ],
+      tags: ["mfcs", "kernel", "invariants", "vessel", "law"]
+    },
+    {
+      id: "intel-001",
+      title: "96-Path Lattice Canonicalization",
+      category: "INTEL",
+      status: "ACTIVE",
+      summary:
+        "The 96-path system has a strong visual artifact and a claimed guardian-state distribution, but the canonical path registry is not yet centralized into typed app data.",
+      rationale:
+        "Without a central registry, standalone visual outputs and app behavior can drift apart and undermine trust in the lattice model.",
+      metrics: [
+        { label: "Standalone Artifact", value: "CODEX_96PATH_v2.html" },
+        { label: "Guardian Domains", value: "Five" },
+        { label: "Dormant Paths", value: "Claimed in artifact" },
+        { label: "Typed Registry", value: "Missing" }
+      ],
+      nextActions: [
+        "Create a typed lattice registry shared by the app and standalone artifacts.",
+        "Audit path counts and guardian balances against actual source data.",
+        "Use the registry to drive explorer filters and future UI overlays."
+      ],
+      relatedFiles: [
+        "CODEX_96PATH_v2.html",
+        "src/pages/LatticePage.tsx",
+        "src/components/3d/LatticeNodes.tsx",
+        "src/components/3d/latticeLayout.ts"
+      ],
+      tags: ["lattice", "96-path", "guardians", "canonicalization", "ui"]
+    },
+    {
+      id: "intel-002",
+      title: "Gamma Toolchain",
+      category: "INTEL",
+      status: "AT_RISK",
+      summary:
+        "The Gamma presentation deck exists and is populated, but the checked-in `gamma-explorer.html` is empty, so the toolchain is not yet internally consistent.",
+      rationale:
+        "The repo should not claim a working mathematical explorer until the file is present and verified locally.",
+      metrics: [
+        { label: "Gamma Deck", value: "Present" },
+        { label: "Gamma Explorer", value: "0 bytes" },
+        { label: "Math Model", value: "Lanczos design claimed" },
+        { label: "Verification", value: "Not local" }
+      ],
+      nextActions: [
+        "Rebuild the Gamma explorer from checked-in source.",
+        "Verify special values and pole handling locally.",
+        "Decide whether Gamma belongs only as reference tooling or also as runtime analysis support."
+      ],
+      relatedFiles: [
+        "gamma-explorer.html",
+        "GAMMA_APP_DECK.md",
+        "GAMMA_STATUS_REPORT.md",
+        "GAMMA_STORAGE_GUIDE.md"
+      ],
+      tags: ["gamma", "math", "visualizer", "deck", "verification"]
+    },
+    {
+      id: "operations-001",
+      title: "Operator Surfaces",
+      category: "OPERATIONS",
+      status: "ACTIVE",
+      summary:
+        "The routed React surface is visually distinctive and already exposes console, lattice, and codex views, but the codex content has been placeholder-heavy rather than system-derived.",
+      rationale:
+        "Operator trust comes from semantic density as much as visual style; this surface should reflect the real state of the repo.",
+      metrics: [
+        { label: "Routes", value: "4 active surfaces" },
+        { label: "Codex Explorer", value: "Now system-backed" },
+        { label: "3D Lattice", value: "Present" },
+        { label: "Telemetry Surface", value: "Present" }
+      ],
+      nextActions: [
+        "Continue replacing placeholder copy with structured repo-backed artifacts.",
+        "Add file lineage and verification state to major operator panels.",
+        "Bridge codex entries to live telemetry where appropriate."
+      ],
+      relatedFiles: [
+        "src/pages/CodexPage.tsx",
+        "src/components/MysticMapExplorer.tsx",
+        "src/pages/LatticePage.tsx",
+        "src/console/index.tsx"
+      ],
+      tags: ["operator", "ui", "console", "codex", "telemetry"]
+    }
+  ]
+};
