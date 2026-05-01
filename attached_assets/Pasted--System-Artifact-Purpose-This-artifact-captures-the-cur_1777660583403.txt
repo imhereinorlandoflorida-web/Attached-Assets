@@ -1,0 +1,97 @@
+# System Artifact
+
+## Purpose
+
+This artifact captures the current shape of the `sovereign-lattice-oracle` system as it exists in the repository today, with emphasis on determinism, observability, lattice semantics, and operator-facing surfaces.
+
+## Core Stack
+
+The system currently has five primary layers:
+
+1. Operator surface
+   React + Vite UI for the home surface, console, codex vault, and lattice view.
+
+2. Runtime state
+   `CodexContext` coordinates processing state, selected signals, playback state, and telemetry for the UI.
+
+3. MFCS kernel
+   `src/lib/mfcs/kernel.ts` defines invariant-aware vessel decisions and law compliance.
+
+4. Oracle engine
+   `src/lib/engine.ts` scores signals, simulates scenarios, and passes options into MFCS.
+
+5. Experimental artifacts
+   The repo also contains standalone deliverables such as the deterministic simulation harness, Gamma materials, and the CODEX 96-path reference HTML.
+
+## What Is Real
+
+- A routed application with `/`, `/console`, `/lattice`, and `/codex`.
+- A typed domain model for signals, processed signals, operators, path states, telemetry, and resilience.
+- A deterministic MFCS kernel with tests in `src/lib/mfcs`.
+- A simulation harness footprint under `src/lib`, though it currently exists in duplicate filename styles and needs consolidation.
+- A standalone 96-path artifact `CODEX_96PATH_v2.html`.
+- Gamma presentation materials, but the explorer file is currently empty and should not be treated as verified until rebuilt.
+
+## Current Friction
+
+### Data integrity
+
+- The codex explorer is still backed by generic placeholder dossier content rather than live system concepts.
+- The simulation harness exists as both dotted and dashed filename variants, which weakens source-of-truth clarity.
+- The Gamma explorer file is zero bytes, so documentation and actual deliverable state are out of sync.
+
+### Visual density
+
+- The codex view has strong visual language but sparse information payload.
+- The standalone 96-path artifact contains dense styling, but it is not tied back to typed app data.
+
+### Interactive capability
+
+- The codex vault supports browsing, but not structured inspection of system domains, risks, files, and next actions.
+- The lattice and codex surfaces are not yet sharing a canonical artifact model.
+
+## Refinement Direction
+
+The next useful posture is:
+
+1. Establish a canonical system artifact in code.
+2. Drive the codex explorer from that artifact.
+3. Use the artifact to expose statuses, metrics, next actions, related files, and system lineage.
+4. Consolidate duplicate simulation harness files once behavior is verified.
+5. Rebuild the Gamma explorer from actual checked-in source rather than prior session claims.
+
+## Canonical Domains
+
+### Deterministic Harness
+
+- Goal: reproducible simulation runs with hashable outputs.
+- Current state: present, duplicated, not yet cleanly consolidated.
+- Next refinement: unify to one module layout and run lint against it.
+
+### MFCS Kernel
+
+- Goal: invariant-aware decision flow.
+- Current state: implemented with tests and clear law-oriented structure.
+- Next refinement: connect harness outputs into validator-style checks.
+
+### 96-Path Lattice
+
+- Goal: canonical path semantics and guardian distribution.
+- Current state: represented in standalone artifact and visual surfaces, but not yet centralized in typed data.
+- Next refinement: central registry for guardian domains, path states, dormant paths, and summaries.
+
+### Gamma Toolchain
+
+- Goal: mathematical reference and visualization layer.
+- Current state: deck exists, explorer file needs reconstitution.
+- Next refinement: regenerate explorer and connect Gamma semantics to simulation analysis where relevant.
+
+### Operator Surfaces
+
+- Goal: make system state inspectable by humans.
+- Current state: visually strong, semantically thin in places.
+- Next refinement: replace placeholder dossier content with structured system artifact data.
+
+## Outcome
+
+This artifact is intended to be the stable interpretation layer between the repo's code, its standalone outputs, and the operator-facing UI. The refinement work in this turn uses that principle directly by moving the codex explorer onto a canonical, system-aware data model.

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Activity, LayoutDashboard, Database, Plus, CircleDot, Crosshair } from "lucide-react";
+import { Activity, LayoutDashboard, Database, Plus, CircleDot, Crosshair, BookMarked } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { href: "/sessions", label: "Sessions", icon: Database },
   { href: "/codex", label: "Codex 96", icon: CircleDot },
   { href: "/nexus", label: "Nexus Oracle", icon: Crosshair },
+  { href: "/vault", label: "Codex Vault", icon: BookMarked },
 ];
 
 export function Sidebar() {

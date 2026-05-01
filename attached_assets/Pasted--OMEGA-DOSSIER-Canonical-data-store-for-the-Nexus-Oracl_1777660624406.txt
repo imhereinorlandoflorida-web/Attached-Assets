@@ -1,0 +1,72 @@
+/**
+ * OMEGA_DOSSIER
+ * 
+ * Canonical data store for the Nexus Oracle strategic vault.
+ * Contains the "Truths" and "Operations" metadata for the UI.
+ */
+import { systemArtifact, ArtifactCategory, ArtifactStatus } from "./systemArtifact";
+
+export interface DossierEntry {
+  id: string;
+  title: string;
+  category: "PROTOCOL" | "INTEL" | "OPERATIONS";
+  category: ArtifactCategory;
+  status: ArtifactStatus;
+  lastUpdated: string;
+  summary: string;
+  details: string[];
+  metrics: { label: string; value: string }[];
+  tags: string[];
+  relatedFiles: string[];
+}
+
+export const omegaDossier: DossierEntry[] = [
+  {
+    id: "p-01",
+    title: "The Omega Protocol",
+    category: "PROTOCOL",
+    lastUpdated: "2026-04-19",
+    summary: "Standard operational procedure for high-variance lattice stabilization.",
+    details: [
+      "Initial state must maintain SVI > 65%.",
+      "Automatic failover to rollback snapshots occurs at < 35%.",
+      "Envelope expansion is limited to 150 energy units."
+    ]
+  },
+  {
+    id: "i-01",
+    title: "Market Resonance Analysis",
+    category: "INTEL",
+    lastUpdated: "2026-04-19",
+    summary: "Current assessment of global market volatility and technical risk paradigms.",
+    details: [
+      "High-frequency signals processed from 12 global exchanges.",
+      "Neural pattern matching accuracy currently at 92%.",
+      "Latency optimized for sub-10ms response cycles."
+    ]
+  },
+  {
+    id: "o-01",
+    title: "Operational Posture v3.0",
+    category: "OPERATIONS",
+    lastUpdated: "2026-04-18",
+    summary: "Deployment guidelines for the Nexus Oracle strategic interface.",
+    details: [
+      "Switch to 'FOCUS' mode for deep signal analysis.",
+      "Utilize 'STABILIZE' command during anomaly bursts.",
+      "Export trace logs for post-operation auditing."
+    ]
+  }
+];
+export const omegaDossier: DossierEntry[] = systemArtifact.domains.map((domain) => ({
+  id: domain.id,
+  title: domain.title,
+  category: domain.category,
+  status: domain.status,
+  lastUpdated: systemArtifact.generatedOn,
+  summary: domain.summary,
+  details: [domain.rationale, ...domain.nextActions],
+  metrics: domain.metrics,
+  tags: domain.tags,
+  relatedFiles: domain.relatedFiles
+}));

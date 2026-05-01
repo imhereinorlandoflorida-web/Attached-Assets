@@ -10,6 +10,7 @@ import SessionNew from "@/pages/session-new";
 import SessionDetail from "@/pages/session-detail";
 import Codex from "@/pages/codex";
 import Nexus from "@/pages/nexus";
+import Vault from "@/pages/vault";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ function Router() {
         <Route path="/sessions/:id" component={SessionDetail} />
         <Route path="/codex" component={Codex} />
         <Route path="/nexus" component={Nexus} />
+        <Route path="/vault" component={Vault} />
         <Route component={NotFound} />
       </Switch>
     </Shell>
