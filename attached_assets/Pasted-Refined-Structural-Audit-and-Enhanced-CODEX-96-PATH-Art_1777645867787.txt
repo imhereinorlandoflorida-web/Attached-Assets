@@ -1,0 +1,78 @@
+Refined Structural Audit and Enhanced CODEX 96-PATH Artifact
+
+---
+
+Overview
+This document represents a fully refined and canonicalized build of the CODEX 96-PATH Sovereign Lattice. It integrates programmatic state generation, rigorous verification, interactive visualization, and enhanced visual density for both analysis and presentation.
+
+---
+
+1. Deterministic State Mapping
+- Paths: 96, partitioned into 5 Guardian Domains
+- States: Trinary \(-1, 0, +1\)
+- Dormant Paths: 10 (non-adjacent, evenly distributed)
+- Verification: All guardian-specific and global constraints satisfied
+
+Global Targets
+- Angelu (+1): 30
+- Deminu (-1): 28
+- Neutral (0): 28
+- Dormant: 10
+- Net State: +2
+
+---
+
+2. Guardian Domains
+Each domain maintains its exact distribution of Angelu, Deminu, Neutral, and Dormant states.
+
+Guardian	Range	⋅	+	-	0	◇	Net
+Lion	1-19		8	5	5	1	+3
+Phoenix	20-38		9	4	4	2	+5
+Dragon	39-57		5	7	5	2	-2
+Owl	58-76		5	5	7	2	0
+Raven	77-96		3	7	7	3	-4
+- Verification: ✓ All per-guardian totals match target configuration.
+
+---
+
+3. Programmatic Generation
+- Single Source of Truth: GUARDIAN_CONFIG
+- Random Seed: Deterministic for reproducibility
+- Constraints:
+    1. Exact per-guardian state counts
+    2. No cluster of 4 identical states
+    3. Non-adjacent dormant paths
+    4. Net state alignment
+
+---
+
+4. Visualization
+- Circular SVG Map
+    - 96 paths placed at 3.75° intervals
+    - Color-coded markers: Teal (+1), Red (−1), Amber (0), Gray (◇ Dormant)
+    - Interactive path markers with tooltips
+    - Labeled dormant paths (inner ring)
+- Guardian Sectors with semi-transparent radial overlays
+
+---
+
+5. Enhanced HTML Artifact
+- Full responsive layout with:
+    - Sticky navigation
+    - Guardian tables
+    - Interactive SVG circular map
+    - Dormant path registry
+    - Polarity and triad explanations
+- Visual Density: Layered gradients, shadows, and state-aware glow effects
+
+---
+
+6. Verification Output
+Global: +30/-28/0=28/◇=10, net=+2
+All constraints: ✓ SATISFIED
+
+Verified build: Sovereign Lattice v2.0
+
+---
+
+This version represents a fully refined, canonical, and interactive artifact, suitable for both analytical inspection and presentation. It is ready for deployment as a standalone HTML reference document with embedded visualization and verified state logic.

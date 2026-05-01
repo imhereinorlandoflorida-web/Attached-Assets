@@ -8,6 +8,7 @@ import Dashboard from "@/pages/dashboard";
 import SessionsList from "@/pages/sessions-list";
 import SessionNew from "@/pages/session-new";
 import SessionDetail from "@/pages/session-detail";
+import Codex from "@/pages/codex";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ function Router() {
         <Route path="/sessions" component={SessionsList} />
         <Route path="/sessions/new" component={SessionNew} />
         <Route path="/sessions/:id" component={SessionDetail} />
+        <Route path="/codex" component={Codex} />
         <Route component={NotFound} />
       </Switch>
     </Shell>
