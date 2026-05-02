@@ -94,3 +94,39 @@ Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHea
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+
+### `artifacts/sentinel` (`@workspace/sentinel`)
+
+React + Vite web app. Dark cyberpunk aesthetic (bg `#09090f`, cyan `#0dd4f0`, purple `#7e47eb`). Uses `wouter` for routing inside a `Shell+Sidebar` layout.
+
+**Pages** (all in `src/pages/`):
+- `/` — Dashboard: live API stats, signal weights, recent activity
+- `/sessions` — Sessions list
+- `/sessions/new` — New session form
+- `/sessions/:id` — Session detail
+- `/codex` — CODEX 96-PATH Sovereign Lattice: circular SVG visualization with 5 Guardian Domains, trinary states
+- `/nexus` — Nexus Oracle: NBA playoff prop betting dashboard with path classifier (DRAGON/MIRROR/MISCHIEF) and correlation lattice
+- `/vault` — Codex Vault Explorer: canonical system artifact explorer backed by `src/data/systemArtifact.ts`
+- `/services` — Sentinel Services: live infrastructure health monitor (API server, PostgreSQL, Object Storage, Web, Mobile) with file upload panel
+
+**Data**: `src/data/systemArtifact.ts` exports `systemArtifact`, `omegaDossier`, and all types used by the vault page.
+
+### `artifacts/sentinel-mobile` (`@workspace/sentinel-mobile`)
+
+Expo React Native mobile app. Three tabs: Dashboard, Sessions, Infer. BlurView was removed from `app/(tabs)/_layout.tsx` and replaced with a semi-transparent View for compatibility with Expo Go.
+
+### `lib/object-storage-web` (`@workspace/object-storage-web`)
+
+Client-side library for GCS object storage uploads. Provides:
+- `ObjectUploader` — Uppy v5 modal file picker component
+- `useUpload()` — React hook for programmatic uploads
+
+## App Storage (Object Storage)
+
+Replit GCS-backed object storage is provisioned. The API server exposes:
+- `POST /api/storage/uploads/request-url` — request presigned upload URL
+- `GET /api/storage/public-objects/:filePath` — serve public assets
+- `GET /api/storage/objects/:objectPath` — serve private objects
+
+Server implementation: `artifacts/api-server/src/routes/storage.ts`, `src/lib/objectStorage.ts`, `src/lib/objectAcl.ts`.
+Bucket ID stored in env: `DEFAULT_OBJECT_STORAGE_BUCKET_ID`.
