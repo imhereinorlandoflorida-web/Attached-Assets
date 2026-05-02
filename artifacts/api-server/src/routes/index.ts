@@ -6,6 +6,7 @@ import aiRouter from "./ai";
 import openaiChatRouter from "./openai-chat";
 import scoreRouter from "./score";
 import feedbackRouter from "./feedback";
+import storageRouter from "./storage";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(aiRouter);
 router.use(openaiChatRouter);
 router.use(scoreRouter);
 router.use(feedbackRouter);
+router.use(storageRouter);
 
 export default router;
